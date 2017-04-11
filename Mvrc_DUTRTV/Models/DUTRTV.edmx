@@ -1,0 +1,209 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Tut12Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Payment">
+          <Key>
+            <PropertyRef Name="PaymentId" />
+          </Key>
+          <Property Name="PaymentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GrossPay" Type="float" Nullable="false" />
+          <Property Name="PresenterId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Presenter">
+          <Key>
+            <PropertyRef Name="PresenterId" />
+          </Key>
+          <Property Name="PresenterId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Contact" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="MinimumWage" Type="float" Nullable="false" />
+          <Property Name="TaxDeduction" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Video">
+          <Key>
+            <PropertyRef Name="VideoId" />
+          </Key>
+          <Property Name="VideoId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PresenterId" Type="int" Nullable="false" />
+          <Property Name="Likes" Type="int" Nullable="false" />
+          <Property Name="RatePerLike" Type="float" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Payment_Presenter">
+          <End Role="Presenter" Type="Self.Presenter" Multiplicity="1" />
+          <End Role="Payment" Type="Self.Payment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Presenter">
+              <PropertyRef Name="PresenterId" />
+            </Principal>
+            <Dependent Role="Payment">
+              <PropertyRef Name="PresenterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Video_Presenter">
+          <End Role="Presenter" Type="Self.Presenter" Multiplicity="1" />
+          <End Role="Video" Type="Self.Video" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Presenter">
+              <PropertyRef Name="PresenterId" />
+            </Principal>
+            <Dependent Role="Video">
+              <PropertyRef Name="PresenterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Tut12ModelStoreContainer">
+          <EntitySet Name="Payment" EntityType="Self.Payment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Presenter" EntityType="Self.Presenter" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Video" EntityType="Self.Video" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Payment_Presenter" Association="Self.FK_Payment_Presenter">
+            <End Role="Presenter" EntitySet="Presenter" />
+            <End Role="Payment" EntitySet="Payment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Video_Presenter" Association="Self.FK_Video_Presenter">
+            <End Role="Presenter" EntitySet="Presenter" />
+            <End Role="Video" EntitySet="Video" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Tut12Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Payment">
+          <Key>
+            <PropertyRef Name="PaymentId" />
+          </Key>
+          <Property Name="PaymentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GrossPay" Type="Double" Nullable="false" />
+          <Property Name="PresenterId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Presenter" Relationship="Self.FK_Payment_Presenter" FromRole="Payment" ToRole="Presenter" />
+        </EntityType>
+        <EntityType Name="Presenter">
+          <Key>
+            <PropertyRef Name="PresenterId" />
+          </Key>
+          <Property Name="PresenterId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Contact" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="MinimumWage" Type="Double" Nullable="false" />
+          <Property Name="TaxDeduction" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Payments" Relationship="Self.FK_Payment_Presenter" FromRole="Presenter" ToRole="Payment" />
+          <NavigationProperty Name="Videos" Relationship="Self.FK_Video_Presenter" FromRole="Presenter" ToRole="Video" />
+        </EntityType>
+        <EntityType Name="Video">
+          <Key>
+            <PropertyRef Name="VideoId" />
+          </Key>
+          <Property Name="VideoId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PresenterId" Type="Int32" Nullable="false" />
+          <Property Name="Likes" Type="Int32" Nullable="false" />
+          <Property Name="RatePerLike" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Presenter" Relationship="Self.FK_Video_Presenter" FromRole="Video" ToRole="Presenter" />
+        </EntityType>
+        <Association Name="FK_Payment_Presenter">
+          <End Role="Presenter" Type="Self.Presenter" Multiplicity="1" />
+          <End Role="Payment" Type="Self.Payment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Presenter">
+              <PropertyRef Name="PresenterId" />
+            </Principal>
+            <Dependent Role="Payment">
+              <PropertyRef Name="PresenterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Video_Presenter">
+          <End Role="Presenter" Type="Self.Presenter" Multiplicity="1" />
+          <End Role="Video" Type="Self.Video" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Presenter">
+              <PropertyRef Name="PresenterId" />
+            </Principal>
+            <Dependent Role="Video">
+              <PropertyRef Name="PresenterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Tut12Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Payments" EntityType="Self.Payment" />
+          <EntitySet Name="Presenters" EntityType="Self.Presenter" />
+          <EntitySet Name="Videos" EntityType="Self.Video" />
+          <AssociationSet Name="FK_Payment_Presenter" Association="Self.FK_Payment_Presenter">
+            <End Role="Presenter" EntitySet="Presenters" />
+            <End Role="Payment" EntitySet="Payments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Video_Presenter" Association="Self.FK_Video_Presenter">
+            <End Role="Presenter" EntitySet="Presenters" />
+            <End Role="Video" EntitySet="Videos" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Tut12ModelStoreContainer" CdmEntityContainer="Tut12Entities">
+          <EntitySetMapping Name="Payments">
+            <EntityTypeMapping TypeName="Tut12Model.Payment">
+              <MappingFragment StoreEntitySet="Payment">
+                <ScalarProperty Name="PaymentId" ColumnName="PaymentId" />
+                <ScalarProperty Name="GrossPay" ColumnName="GrossPay" />
+                <ScalarProperty Name="PresenterId" ColumnName="PresenterId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Presenters">
+            <EntityTypeMapping TypeName="Tut12Model.Presenter">
+              <MappingFragment StoreEntitySet="Presenter">
+                <ScalarProperty Name="PresenterId" ColumnName="PresenterId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Contact" ColumnName="Contact" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="MinimumWage" ColumnName="MinimumWage" />
+                <ScalarProperty Name="TaxDeduction" ColumnName="TaxDeduction" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Videos">
+            <EntityTypeMapping TypeName="Tut12Model.Video">
+              <MappingFragment StoreEntitySet="Video">
+                <ScalarProperty Name="VideoId" ColumnName="VideoId" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="PresenterId" ColumnName="PresenterId" />
+                <ScalarProperty Name="Likes" ColumnName="Likes" />
+                <ScalarProperty Name="RatePerLike" ColumnName="RatePerLike" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,50 @@
+﻿@model Mvrc_DUTRTV.Models.Payment
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Payment</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.GrossPay)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GrossPay)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Deduction)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Deduction)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NettPay)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NettPay)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Presenter.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Presenter.Name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.PaymentId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
