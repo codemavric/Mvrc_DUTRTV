@@ -57,6 +57,7 @@ namespace Mvrc_DUTRTV.Controllers
                 return View(payment);
             }
 
+            // now that we have a valid presenter that we know is not null, we can populate the GrossPay variable.
             payment.GrossPay = presenter.MinimumWage;
 
             // we need to add our payment to the payments list in the presenter we fetched from the database. 
@@ -64,6 +65,8 @@ namespace Mvrc_DUTRTV.Controllers
 
             // Entity Framework will now automatically populate the PresenterId on the payment when it is saves the payment to the database since it can see
             // that the payment belongs to the presenter since it is in the presenters Payments list.
+            // Note we don't need to save the payment directly to the db.Payments DbSet. What we're doing is saving the presenter that includes a payment.
+            // Entity framework then takes of the rest for you.
             db.SaveChanges();
             return RedirectToAction("Index");
         }
