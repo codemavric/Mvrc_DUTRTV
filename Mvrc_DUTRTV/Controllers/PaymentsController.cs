@@ -46,22 +46,26 @@ namespace Mvrc_DUTRTV.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ActionName("Create")]
-        public ActionResult Create_Post()
+        // Your form in Views/Payments/Create.cshtml is posting back a PresenterId from the DropDownList
+        public ActionResult Create_Post(int presenterId)
         {
-            
-            Payment payment = new Payment();
-            Presenter p = new Presenter();
-            if (ModelState.IsValid)
+            var payment = new Payment();
+            var presenter = db.Presenters.Find(presenterId); // now that we have the presenterId, we have to fetch it from the database
+            if (presenter == null) // if the presenter is null, then a presenter with presenterId does not exist in our database and so the presenterId is invalid
             {
-
-                payment.GrossPay = p.MinimumWage;
-                db.Payments.Add(payment);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                ViewBag.PresenterId = new SelectList(db.Presenters, "PresenterId", "Name", payment.PresenterId);
+                return View(payment);
             }
 
-            ViewBag.PresenterId = new SelectList(db.Presenters, "PresenterId", "Name", payment.PresenterId);
-            return View(payment);
+            payment.GrossPay = presenter.MinimumWage;
+
+            // we need to add our payment to the payments list in the presenter we fetched from the database. 
+            presenter.Payments.Add(payment);
+
+            // Entity Framework will now automatically populate the PresenterId on the payment when it is saves the payment to the database since it can see
+            // that the payment belongs to the presenter since it is in the presenters Payments list.
+            db.SaveChanges();
+            return RedirectToAction("Index");
         }
 
         // GET: Payments/Edit/5

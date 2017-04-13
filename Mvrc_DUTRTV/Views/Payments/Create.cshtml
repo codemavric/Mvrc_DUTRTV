@@ -19,8 +19,9 @@
         <div class="form-group">
             @Html.LabelFor(model => model.PresenterId, "PresenterId", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(m => m.PresenterId, null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.PresenterId, "", new { @class = "text-danger" })
+                @* This is posting back a PresenterId to the Create_Post method in the Payments Controller *@
+                @Html.DropDownListFor(m => m.PresenterId, null, htmlAttributes: new {@class = "form-control"})
+                @Html.ValidationMessageFor(model => model.PresenterId, "", new {@class = "text-danger"})
             </div>
         </div>
 
